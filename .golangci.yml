@@ -2,8 +2,6 @@ linters:
     presets:
       - bugs
     disable:
-      - rowserrcheck
-      - sqlclosecheck
       - funlen
       - noctx
       - gosmopolitan

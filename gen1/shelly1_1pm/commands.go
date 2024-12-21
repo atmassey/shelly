@@ -1,8 +1,15 @@
 package shelly1_1pm
 
-import "net/http"
+import (
+	"errors"
+	"net"
+	"net/http"
+)
 
 func relayCommand(IP string, Command string, Timer string) error {
+	if net.ParseIP(IP) == nil {
+		return errors.New("invalid IP address")
+	}
 	req, err := http.NewRequest("GET", "http://"+IP+"/relay/0", nil)
 	if err != nil {
 		return err

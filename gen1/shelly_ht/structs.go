@@ -25,7 +25,7 @@ type SleepMode struct {
 }
 
 // Configuration represents the overall configuration
-type Configuration struct {
+type Settings struct {
 	Device            Device    `json:"device"`
 	Actions           Actions   `json:"actions"`
 	Sensors           Sensors   `json:"sensors"`

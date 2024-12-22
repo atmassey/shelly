@@ -2,6 +2,7 @@ package shelly_ht
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
 	"net"
@@ -27,6 +28,9 @@ func GetStatus(IP string) (*Status, error) {
 			log.Printf("failed to close response body: %v", err)
 		}
 	}()
+	if resp.StatusCode != http.StatusOK {
+		return nil, errors.New("failed to get status, response status: " + resp.Status)
+	}
 	var status Status
 	if err := json.NewDecoder(resp.Body).Decode(&status); err != nil {
 		return nil, err
@@ -53,6 +57,9 @@ func GetSettings(IP string) (*Settings, error) {
 			log.Printf("failed to close response body: %v", err)
 		}
 	}()
+	if resp.StatusCode != http.StatusOK {
+		return nil, errors.New("failed to get settings, response status: " + resp.Status)
+	}
 	var settings Settings
 	if err := json.NewDecoder(resp.Body).Decode(&settings); err != nil {
 		return nil, err

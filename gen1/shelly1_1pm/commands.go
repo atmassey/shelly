@@ -29,7 +29,7 @@ func relayCommand(IP string, Command string, Timer string) error {
 		}
 	}()
 	if resp.StatusCode != http.StatusOK {
-		return err
+		return errors.New("failed to send command, response status: " + resp.Status)
 	}
 	return nil
 }

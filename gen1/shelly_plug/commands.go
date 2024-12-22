@@ -1,11 +1,37 @@
-package shelly1_1pm
+package shelly_plug
 
 import (
+	"encoding/json"
 	"errors"
 	"log"
 	"net"
 	"net/http"
 )
+
+func GetSettings(IP string) (*Settings, error) {
+	if net.ParseIP(IP) == nil {
+		return nil, errors.New("invalid IP address")
+	}
+	req, err := http.NewRequest("GET", "http://"+IP+"/settings", nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Accept", "application/json")
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+			log.Printf("failed to close response body: %v", err)
+		}
+	}()
+	var settings Settings
+	if err := json.NewDecoder(resp.Body).Decode(&settings); err != nil {
+		return nil, err
+	}
+	return &settings, nil
+}
 
 func relayCommand(IP string, Command string, Timer string) error {
 	if net.ParseIP(IP) == nil {

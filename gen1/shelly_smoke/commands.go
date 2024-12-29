@@ -8,6 +8,7 @@ import (
 	"net/http"
 )
 
+// Status represents the status of the device.
 func GetStatus(IP string) (*Status, error) {
 	if net.ParseIP(IP) == nil {
 		return nil, errors.New("invalid IP address")
@@ -36,6 +37,7 @@ func GetStatus(IP string) (*Status, error) {
 	return &status, nil
 }
 
+// Settings represents the settings of the device.
 func GetSettings(IP string) (*Settings, error) {
 	if net.ParseIP(IP) == nil {
 		return nil, errors.New("invalid IP address")
@@ -64,6 +66,7 @@ func GetSettings(IP string) (*Settings, error) {
 	return &settings, nil
 }
 
+// SettingsActions represents the settings actions of the device.
 func GetSettingsActions(IP string) (*SettingsActions, error) {
 	if net.ParseIP(IP) == nil {
 		return nil, errors.New("invalid IP address")

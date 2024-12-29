@@ -34,14 +34,17 @@ func relayCommand(IP string, Command string, Timer string) error {
 	return nil
 }
 
+// RelayOn turns the relay on.
 func RelayOn(IP string) error {
 	return relayCommand(IP, "on", "0")
 }
 
+// RelayOff turns the relay off.
 func RelayOff(IP string) error {
 	return relayCommand(IP, "off", "0")
 }
 
+// RelayToggle toggles the relay.
 func RelayToggle(IP string) error {
 	return relayCommand(IP, "toggle", "0")
 }

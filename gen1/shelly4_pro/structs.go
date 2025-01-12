@@ -1,6 +1,6 @@
 package shelly4_pro
 
-type Relay struct {
+type RelayFull struct {
 	Name          *string       `json:"name"`
 	IsOn          bool          `json:"ison"`
 	HasTimer      bool          `json:"has_timer"`
@@ -23,6 +23,19 @@ type Meter struct {
 }
 
 type Device struct {
+	Relays []RelayFull `json:"relays"`
+	Meters []Meter     `json:"meters"`
+}
+
+type Relay struct {
+	Ison           bool `json:"ison"`
+	HasTimer       bool `json:"has_timer"`
+	TimerRemaining int  `json:"timer_remaining"`
+	Overpower      bool `json:"overpower"`
+	IsValid        bool `json:"is_valid"`
+}
+
+type RelayStatus struct {
 	Relays []Relay `json:"relays"`
 	Meters []Meter `json:"meters"`
 }

@@ -19,3 +19,18 @@ type Ota struct {
 type Ota_Check struct {
 	Status string `json:"status"`
 }
+
+// WifiScan represents the structure of the wifi scan JSON data
+type WifiScan struct {
+	WifiScan string   `json:"wifiscan"`
+	Results  []Result `json:"results"`
+}
+
+// Result represents the structure of each result in the wifi scan
+type Result struct {
+	SSID    string `json:"ssid"`
+	Auth    int    `json:"auth"`
+	Channel int    `json:"channel"`
+	BSSID   string `json:"bssid"`
+	RSSI    int    `json:"rssi"`
+}

@@ -128,3 +128,97 @@ func GetWifiScan(IP string) (*WifiScan, error) {
 	}
 	return &wifiScan, nil
 }
+
+// Represents device configuration: all devices support a set of common features which are described here.
+// Look at the device-specific /settings endpoint to see how each device extends it.
+func GetSettings(IP string) (*Settings, error) {
+	var settings Settings
+	req, err := http.NewRequest("GET", "http://"+IP+"/settings", nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Accept", "application/json")
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	if resp.StatusCode != http.StatusOK {
+		return nil, errors.New("failed to get settings, response status: " + resp.Status)
+	}
+	defer resp.Body.Close()
+	if err := json.NewDecoder(resp.Body).Decode(&settings); err != nil {
+		return nil, err
+	}
+	return &settings, nil
+}
+
+// Provides information about the current WiFi AP configuration and allows changes.
+// The returned document is identical to the one returned by /settings in the wifi_ap key.
+// Shelly devices do not allow the SSID for AP WiFi mode to be changed.
+func GetSettingsAP(IP string) (*WifiAp, error) {
+	var settings WifiAp
+	req, err := http.NewRequest("GET", "http://"+IP+"/settings/ap", nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Accept", "application/json")
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	if resp.StatusCode != http.StatusOK {
+		return nil, errors.New("failed to get settings ap, response status: " + resp.Status)
+	}
+	defer resp.Body.Close()
+	if err := json.NewDecoder(resp.Body).Decode(&settings); err != nil {
+		return nil, err
+	}
+	return &settings, nil
+}
+
+// Provides information about the current WiFi Client mode configuration and allows changes.
+// The returned document is identical to the one returned by /settings in the wifi_sta key.
+func GetSettingsSta(IP string) (*WifiSta, error) {
+	var settings WifiSta
+	req, err := http.NewRequest("GET", "http://"+IP+"/settings/sta", nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Accept", "application/json")
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	if resp.StatusCode != http.StatusOK {
+		return nil, errors.New("failed to get settings sta, response status: " + resp.Status)
+	}
+	defer resp.Body.Close()
+	if err := json.NewDecoder(resp.Body).Decode(&settings); err != nil {
+		return nil, err
+	}
+	return &settings, nil
+}
+
+// HTTP authentication configuration: enabled flag, credentials.
+// Unprotected is initially false and is used by the user interface to show a warning when auth is disabled.
+// If the user wants to keep using Shelly without a password, they can set unprotected to hide the warning.
+func GetSettingsLogin(IP string) (*Login, error) {
+	var login Login
+	req, err := http.NewRequest("GET", "http://"+IP+"/login", nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Accept", "application/json")
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	if resp.StatusCode != http.StatusOK {
+		return nil, errors.New("failed to get login, response status: " + resp.Status)
+	}
+	defer resp.Body.Close()
+	if err := json.NewDecoder(resp.Body).Decode(&login); err != nil {
+		return nil, err
+	}
+	return &login, nil
+}

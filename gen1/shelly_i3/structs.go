@@ -16,6 +16,13 @@ type Input struct {
 	BtnReverse int     `json:"btn_reverse"`
 }
 
+type InputChannel struct {
+	Input     int    `json:"input"`
+	Event     string `json:"event"`
+	Event_Cnt int    `json:"event_cnt"`
+	Last_Seq  string `json:"last_sequence"`
+}
+
 type Settings struct {
 	LongPushDurationMs           Duration `json:"longpush_duration_ms"`
 	MultiPushTimeBetweenPushesMs struct {

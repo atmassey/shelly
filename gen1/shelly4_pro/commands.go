@@ -3,6 +3,7 @@ package shelly4_pro
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
 	"net"
 	"net/http"
@@ -66,4 +67,47 @@ func GetStatus(IP string) (*RelayStatus, error) {
 		return nil, err
 	}
 	return &status, nil
+}
+
+func relayCommand(IP string, index int, command string) error {
+	if net.ParseIP(IP) == nil {
+		return errors.New("invalid IP address")
+	}
+	req, err := http.NewRequest("POST", "http://"+IP+"/relay/"+fmt.Sprint(index), nil)
+	if err != nil {
+		return err
+	}
+	req.Header.Set("Accept", "application/json")
+	q := req.URL.Query()
+	q.Add("turn", command)
+	req.URL.RawQuery = q.Encode()
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return err
+	}
+	defer func() {
+		err := resp.Body.Close()
+		if err != nil {
+			log.Printf("Failed to close response body: %v", err)
+		}
+	}()
+	if resp.StatusCode != http.StatusOK {
+		return errors.New("Failed to send command, response status: " + resp.Status)
+	}
+	return nil
+}
+
+// TurnOn turns the relay on.
+func TurnOn(IP string, index int) error {
+	return relayCommand(IP, index, "on")
+}
+
+// TurnOff turns the relay off.
+func TurnOff(IP string, index int) error {
+	return relayCommand(IP, index, "off")
+}
+
+// Toggle toggles the relay.
+func Toggle(IP string, index int) error {
+	return relayCommand(IP, index, "toggle")
 }
